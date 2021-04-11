@@ -1,0 +1,9 @@
+{% if latest_bugs_list %}
+    <ul>
+    {% for bug in latest_bugs_list %}
+        <li><a href="{% url 'bugs:detail' bug.id %}">{{ bug.bug_text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No bugs to squish.</p>
+{% endif %}

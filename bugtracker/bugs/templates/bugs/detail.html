@@ -1,0 +1,14 @@
+<h1>{{ bug.bug_title }}</h1>
+<h2>{{bug.bug_text}}</h2>
+{% for comment in comments %}
+        <div class="comments" style="padding: 10px;">
+          <p class="font-weight-bold">
+            {{ comment.comment_author }}
+            <span class=" text-muted font-weight-normal">
+              {{ comment.comment_date }}
+            </span>
+          </p>
+          {{ comment.comment_text | linebreaks }}
+        </div>
+{% endfor %}
+
