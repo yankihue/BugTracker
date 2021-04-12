@@ -2,6 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Bug
 from django.template import loader
+from rest_framework import viewsets
+from .serializers import BugSerializer
+
+class BugView(viewsets.ModelViewSet):
+    serializer_class = BugSerializer
+    queryset = Bug.objects.all()
+
 
 def index(request):
     latest_bugs_list = Bug.objects.order_by('-pub_date')[:5]

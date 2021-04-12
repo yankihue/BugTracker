@@ -4,7 +4,5 @@ from . import views
 
 app_name='bugs'
 urlpatterns = [
-    path('',views.index, name='index'),
-    path('<int:bug_id>/',views.detail, name='detail'),
-    path('<int:bug_id>/respond',views.respond, name='respond'),
+    
 ]
