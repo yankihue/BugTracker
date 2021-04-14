@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 import Modal from "./components/Modal";
 import axios from "axios";
 class App extends Component {
@@ -56,14 +55,13 @@ class App extends Component {
   //TODO: PUT method doesnt work
   editItem = (item) => {
     this.setState({ activeItem: item, modal: !this.state.modal });
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(item),
-    };
-    fetch(`http://localhost:8000/api/bugs/${item.id}/`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => this.setState(data));
+    if (item.id) {
+      axios
+        .put(`/api/bugs/${item.id}/`, item)
+        .then((res) => this.refreshList());
+      return;
+    }
+    axios.post("/api/bugs/", item).then((res) => this.refreshList());
   };
 
   renderItems = () => {
@@ -102,25 +100,24 @@ class App extends Component {
           <Navbar.Brand href="#home">
             <img
               alt=""
-              src="/logo.svg"
+              src={require("./logo.svg")}
               width="30"
               height="30"
               className="d-inline-block align-top"
             />{" "}
             BugTracker
           </Navbar.Brand>
-          <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#bugs">Bugs</Nav.Link>
-          </Nav>
         </Navbar>
-        <div className="mb-4">
-          <button className="btn btn-primary" onClick={this.createItem}>
-            Add bug
-          </button>
-        </div>
+
         <div className="row">
           <div className="col-md-6 col-sm-10 mx-auto p-0">
+            <div className="mb-4 mt-4">
+              <div classname="row">
+                <button className="btn btn-primary" onClick={this.createItem}>
+                  Add bug
+                </button>
+              </div>
+            </div>
             <div className="card p-3">
               <ul className="list-group list-group-flush">
                 {this.renderItems()}
