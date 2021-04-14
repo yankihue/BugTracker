@@ -21,7 +21,6 @@ class App extends Component {
     this.setState({ modal: !this.state.modal });
   };
 
-
   componentDidMount() {
     this.refreshList();
   }
@@ -33,8 +32,6 @@ class App extends Component {
       .catch((err) => console.log(err));
   };
 
-
-
   handleSubmit = (item) => {
     this.toggle();
 
@@ -44,15 +41,11 @@ class App extends Component {
         .then((res) => this.refreshList());
       return;
     }
-    axios
-      .post("/api/bugs/", item)
-      .then((res) => this.refreshList());
+    axios.post("/api/bugs/", item).then((res) => this.refreshList());
   };
 
   handleDelete = (item) => {
-    axios
-    .delete(`/api/bugs/${item.id}/`)
-    .then((res) => this.refreshList());
+    axios.delete(`/api/bugs/${item.id}/`).then((res) => this.refreshList());
   };
 
   createItem = () => {
@@ -72,7 +65,6 @@ class App extends Component {
       .then((response) => response.json())
       .then((data) => this.setState(data));
   };
-
 
   renderItems = () => {
     const newItems = this.state.bugList;
