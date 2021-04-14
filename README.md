@@ -7,7 +7,10 @@ Install dependencies with
 ```bash
 poetry install
 ```
-
+and activate the virtual environment.
+```bash
+poetry shell
+```
 Afterwards change into the backend directory
 
 ```bash
