@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Modal from "./components/Modal";
-
+import axios from 'axios';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +21,14 @@ class App extends Component {
     this.setState({ modal: !this.state.modal });
   };
 
+  refreshList = () => {
+    fetch("http://localhost:8000/api/bugs/")
+      .then((response) => response.json())
+      .then((data) => this.setState(data))
+      .catch((err) => console.log(err));
+  };
+
+
   handleSubmit = (item) => {
     this.toggle();
 
@@ -31,13 +39,11 @@ class App extends Component {
     };
     fetch("http://localhost:8000/api/bugs/", requestOptions)
       .then((response) => response.json())
-      .then((data) => this.setState(data));
+      .then((data) => this.refreshList());
   };
 
   handleDelete = (item) => {
-    fetch(`http://localhost:8000/api/bugs/${item.id}/`, { method: "DELETE" })
-      .then((response) => response.json())
-      .then((data) => this.setState({ state: !this.state }));
+    fetch(`http://localhost:8000/api/bugs/${item.id}/`, { method: "DELETE" });
   };
 
   createItem = () => {
@@ -58,17 +64,16 @@ class App extends Component {
       .then((data) => this.setState({ postId: data.id }));
   };
 
-  async componentDidMount() {
-    try {
-      const res = await fetch("http://localhost:8000/api/bugs/");
-      const bugList = await res.json();
-      this.setState({
-        bugList,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+  componentDidMount() {
+    this.refreshList();
   }
+
+  refreshList = () => {
+    axios
+      .get("/api/todos/")
+      .then((res) => this.setState({ bugList: res.data }))
+      .catch((err) => console.log(err));
+  };
 
   renderItems = () => {
     const newItems = this.state.bugList;
