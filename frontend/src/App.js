@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import Modal from "./components/Modal";
+import { CommentModal, CustomModal as Modal } from "./components/Modal";
 import axios from "axios";
 import { ReactComponent as Logo } from "./logo.svg";
 
@@ -9,6 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       modal: false,
+      commentModal: false,
       activeItem: {
         bug_title: "",
         bug_text: "",
@@ -20,6 +21,10 @@ class App extends Component {
 
   toggle = () => {
     this.setState({ modal: !this.state.modal });
+  };
+
+  toggleComment = () => {
+    this.setState({ commentModal: !this.state.commentModal });
   };
 
   componentDidMount() {
@@ -45,8 +50,32 @@ class App extends Component {
     axios.post("/api/bugs/", item).then((res) => this.refreshList());
   };
 
+  
+  handleSubmitComment = (item) => {
+    this.toggleComment();
+
+    if (item.id) {
+      axios
+        .put(`/api/comments/${item.id}/`, item)
+        .then((res) => this.refreshList());
+      return;
+    }
+    axios.post("/api/comments/", item).then((res) => this.refreshList());
+  };
+
+
   handleDelete = (item) => {
     axios.delete(`/api/bugs/${item.id}/`).then((res) => this.refreshList());
+  };
+
+  addComment = () => {
+    const item = {
+      comment_author: "",
+      comment_text: "",
+      comment_date: "",
+    };
+
+    this.setState({ activeItem: item, commentModal: !this.state.commentModal });
   };
 
   createItem = () => {
@@ -54,7 +83,7 @@ class App extends Component {
 
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
-  //TODO: PUT method doesnt work
+
   editItem = (item) => {
     this.setState({ activeItem: item, modal: !this.state.modal });
     if (item.id) {
@@ -76,6 +105,7 @@ class App extends Component {
         <span bug_title={item.bug_title}>
           {item.bug_title}
           <div>{item.bug_text}</div>
+          <a href="">Comments</a>
         </span>
         <span>
           <button
@@ -83,6 +113,12 @@ class App extends Component {
             onClick={() => this.editItem(item)}
           >
             Edit
+          </button>
+          <button
+            className="btn btn-primary mr-2"
+            onClick={() => this.addComment(item)}
+          >
+            Add comment
           </button>
           <button
             className="btn btn-danger"
@@ -100,7 +136,7 @@ class App extends Component {
       <main className="content">
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="#home">
-            <Logo 
+            <Logo
               width="30"
               height="30"
               className="d-inline-block align-top"
@@ -130,6 +166,13 @@ class App extends Component {
             activeItem={this.state.activeItem}
             toggle={this.toggle}
             onSave={this.handleSubmit}
+          />
+        ) : null}
+        {this.state.commentModal ? (
+          <CommentModal
+            activeItem={this.state.activeItem}
+            toggle={this.toggleComment}
+            onSave={this.handleSubmitComment}
           />
         ) : null}
       </main>
