@@ -21,7 +21,7 @@ Afterwards change into the backend directory
 cd bugtracker
 ```
 
-And then start the server
+And start the server.
 ```bash
 python manage.py runserver
 ```
