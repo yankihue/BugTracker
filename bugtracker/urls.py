@@ -25,5 +25,4 @@ router.register(r'comments', views.CommentView, 'comment')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-
 ]
