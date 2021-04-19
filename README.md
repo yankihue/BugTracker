@@ -44,5 +44,5 @@ Then start the react app.
 npm start
 ```
 
-During development running `python manage.py runserver` will run development settings. You can switch to production settings by running `python manage.py runserver --settings=bugtracker.settings.development`.
+During development running `python manage.py runserver` will run development settings. You can switch to production settings by running `python manage.py runserver --settings=bugtracker.settings.prod`.
 
