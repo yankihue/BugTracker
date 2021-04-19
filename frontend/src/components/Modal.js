@@ -11,7 +11,7 @@ import {
   Label,
 } from "reactstrap";
 
-export default class CustomModal extends Component {
+export class CustomModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,6 +79,68 @@ export default class CustomModal extends Component {
           <Button
             color="success"
             onClick={() => onSave(this.state.activeItem)}
+          >
+            Save
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+}
+
+
+export class CommentModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeComment: this.props.activeComment,
+    };
+  }
+
+  handleChangeComment = (e) => {
+
+    const activeComment = { ...this.state.activeComment };
+
+    this.setState({ activeComment });
+  };
+
+ 
+  render() {
+    const { toggle, onSave } = this.props;
+
+    return (
+      <Modal isOpen={true} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Comment</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label for="comment_author">Author</Label>
+              <Input
+                type="text"
+                id="comment_author"
+                name="comment_author"
+                value={this.state.activeComment.comment_author}
+                onChange={this.handleChangeComment}
+                placeholder="Enter your name"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for="comment_text">Comment text</Label>
+              <Input
+                type="text"
+                id="comment_text"
+                name="comment_text"
+                value={this.state.activeComment.comment_text}
+                onChange={this.handleChangeComment}
+                placeholder="Enter your comment"
+              />
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="success"
+            onClick={() => onSave(this.state.activeComment)}
           >
             Save
           </Button>
