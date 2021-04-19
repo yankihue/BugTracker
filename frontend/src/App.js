@@ -18,6 +18,7 @@ class App extends Component {
       activeComment: {
         comment_author: "",
         comment_text: "",
+        bug:"",
       },
       bugList: [],
     };
@@ -58,12 +59,6 @@ class App extends Component {
   handleSubmitComment = (item) => {
     this.toggleComment();
 
-    if (item.id) {
-      axios
-        .put(`/api/comments/${item.id}/`, item)
-        .then((res) => this.refreshList());
-      return;
-    }
     axios.post("/api/comments/", item).then((res) => this.refreshList());
   };
 
@@ -78,8 +73,8 @@ class App extends Component {
   };
 
 
-  addComment = () => {
-    const item = { comment_author: "", comment_text: "" };
+  addComment = (bug) => {
+    const item = { comment_author: "", comment_text: "" , bug: bug.bug_title};
 
     this.setState({ activeComment: item, commentModal: !this.state.commentModal });
   };
@@ -122,7 +117,7 @@ class App extends Component {
             Delete
           </button>
           <button className="btn btn-primary ml-2" 
-          onClick={this.addComment}>
+               onClick={() => this.addComment(item)}>
             Add comment</button>
 
         </span>
