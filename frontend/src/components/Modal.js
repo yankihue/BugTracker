@@ -97,9 +97,11 @@ export class CommentModal extends Component {
     };
   }
 
-  handleChangeComment = (e) => {
 
-    const activeComment = { ...this.state.activeComment };
+  handleChangeComment = (e) => {
+    let { name, value } = e.target;
+
+    const activeComment = { ...this.state.activeComment, [name]: value };
 
     this.setState({ activeComment });
   };
