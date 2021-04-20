@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import Modal from "./components/Modal";
+import { CustomModal as Modal, CommentModal} from "./components/Modal";
 import axios from "axios";
 import { ReactComponent as Logo } from "./logo.svg";
 
@@ -9,10 +9,16 @@ class App extends Component {
     super(props);
     this.state = {
       modal: false,
+      commentModal: false,
       activeItem: {
         bug_title: "",
         bug_text: "",
         active: false,
+      },
+      activeComment: {
+        comment_author: "",
+        comment_text: "",
+        bug:"",
       },
       bugList: [],
     };
@@ -20,6 +26,10 @@ class App extends Component {
 
   toggle = () => {
     this.setState({ modal: !this.state.modal });
+  };
+
+  toggleComment = () => {
+    this.setState({ commentModal: !this.state.commentModal });
   };
 
   componentDidMount() {
@@ -45,6 +55,13 @@ class App extends Component {
     axios.post("/api/bugs/", item).then((res) => this.refreshList());
   };
 
+
+  handleSubmitComment = (item) => {
+    this.toggleComment();
+
+    axios.post("/api/comments/", item).then((res) => this.refreshList());
+  };
+
   handleDelete = (item) => {
     axios.delete(`/api/bugs/${item.id}/`).then((res) => this.refreshList());
   };
@@ -54,7 +71,16 @@ class App extends Component {
 
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
-  //TODO: PUT method doesnt work
+
+
+  addComment = (bug) => {
+    const item = { comment_author: "", comment_text: "" , bug: bug.id};
+
+    this.setState({ activeComment: item, commentModal: !this.state.commentModal });
+  };
+
+
+
   editItem = (item) => {
     this.setState({ activeItem: item, modal: !this.state.modal });
     if (item.id) {
@@ -90,6 +116,10 @@ class App extends Component {
           >
             Delete
           </button>
+          <button className="btn btn-primary ml-2" 
+               onClick={() => this.addComment(item)}>
+            Add comment</button>
+
         </span>
       </li>
     ));
@@ -130,6 +160,13 @@ class App extends Component {
             activeItem={this.state.activeItem}
             toggle={this.toggle}
             onSave={this.handleSubmit}
+          />
+        ) : null}
+        {this.state.commentModal ? (
+          <CommentModal
+            activeComment={this.state.activeComment}
+            toggle={this.toggleComment}
+            onSave={this.handleSubmitComment}
           />
         ) : null}
       </main>
