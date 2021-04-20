@@ -13,7 +13,6 @@ class BugSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
 
-# TODO: serializer problem. post request doesnt work from the frontend
     bug = serializers.PrimaryKeyRelatedField(queryset=Bug.objects.all())
     class Meta:
         model = Comment

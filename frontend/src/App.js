@@ -74,13 +74,13 @@ class App extends Component {
 
 
   addComment = (bug) => {
-    const item = { comment_author: "", comment_text: "" , bug: bug.bug_title};
+    const item = { comment_author: "", comment_text: "" , bug: bug.id};
 
     this.setState({ activeComment: item, commentModal: !this.state.commentModal });
   };
 
 
-  //TODO: PUT method doesnt work
+
   editItem = (item) => {
     this.setState({ activeItem: item, modal: !this.state.modal });
     if (item.id) {
